@@ -12,7 +12,7 @@ Examples:
   puts.yellow "Hello world in yellow"
   puts.red    "Hello world in red" 
   puts.red!   "Hello world in red, but with boldness"
-  puts.red_   "Hello world in red, but with strikethrough"
+  puts.red_   "Hello world in red, but with underscore"
   puts.rainbow "Hellow world, but more silly."
 
 

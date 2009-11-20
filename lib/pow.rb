@@ -56,7 +56,9 @@ module Pow
         # Bold
         self.class.send(:define_method, "#{key}!".to_sym) { |*args| Puts.new({:color => key.to_sym, :text => args[0], :bold => true, :misc => args[1]}).out! }
         # Strikethrough
-        self.class.send(:define_method, "#{key}_".to_sym) { |*args| Puts.new({:color => key.to_sym, :text => args[0], :strikethrough => true, :misc => args[1]}).out! }
+        #self.class.send(:define_method, "#{key}_".to_sym) { |*args| Puts.new({:color => key.to_sym, :text => args[0], :strikethrough => true, :misc => args[1]}).out! }
+        # Underline
+        self.class.send(:define_method, "#{key}_".to_sym) { |*args| Puts.new({:color => key.to_sym, :text => args[0], :underline => true, :misc => args[1]}).out! }
       end     
       # FIXME make this part a method or less fug
       if options[:misc] && options[:misc].is_a?(Hash)
@@ -113,6 +115,7 @@ module Pow
       background     = options.fetch(:background){ false }
       concealed      = options.fetch(:concealed){ false }
       strikethrough  = options.fetch(:strikethrough){ false }
+      underscore     = options.fetch(:underscore){ false }
 
       if text != ""
         result = [escape_sequence(color), text, escape_sequence(:reset), newline].join
@@ -140,6 +143,10 @@ module Pow
 
       if strikethrough
         result.insert(0, escape_sequence(:strikethrough))
+      end
+
+      if underscore
+        result.insert(0, escape_sequence(:underscore))
       end
 
       return result

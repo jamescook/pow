@@ -39,6 +39,12 @@ class PowTest < Test::Unit::TestCase
     assert_equal "\e[1mTEST\e[0m\n", @writer.gets
   end
 
+  def test_puts_with_underscore
+    @puts.new(:text => "TEST", :underscore => :true, :writer => @writer).out!
+    @writer.rewind
+    assert_equal "\e[4m\e[37mTEST\e[0m\n", @writer.gets
+  end
+
   def test_puts_with_strikethrough
     @puts.new(:text => "TEST", :strikethrough => :true, :writer => @writer).out!
     @writer.rewind
