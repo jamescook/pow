@@ -61,6 +61,7 @@ module Pow
       # FIXME make this part a method or less fug
       if options[:misc] && options[:misc].is_a?(Hash)
         options[:bold]       ||= options[:misc][:bold]
+        options[:negative]   ||= options[:misc][:negative]
         options[:underline]  ||= options[:misc][:underline]
         options[:background] ||= (options[:misc][:background] || options[:misc][:on])
         options[:strikethrough]  ||= options[:misc][:strikethrough]
@@ -106,6 +107,8 @@ module Pow
       color          = options.fetch(:color){ :white }
       text           = options.fetch(:text){ '' }
       bold           = options.fetch(:bold){ false }
+      negative       = options.fetch(:negative){ false }
+      italic         = options.fetch(:italic){ false }
       underline      = options.fetch(:underline){ false }
       background     = options.fetch(:background){ false }
       concealed      = options.fetch(:concealed){ false }
@@ -117,6 +120,10 @@ module Pow
 
       if bold
         result.insert(0, escape_sequence(:bold))
+      end
+
+      if negative
+        result.insert(0, escape_sequence(:negative))
       end
 
       if underline
