@@ -1,8 +1,9 @@
+require "rake"
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gemspec|
     gemspec.name = "jamescook-pow"
-    gemspec.version = "0.1.0"
+    gemspec.version = "0.1.1"
     gemspec.summary = "puts with colors"
     gemspec.description = "'puts' with shell colors."
     gemspec.email = "jamecook@gmail.com"
@@ -12,3 +13,12 @@ begin
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install jeweler"
 end
+
+task :default => [:test]
+
+desc "Run tests"
+task :test do |t|
+  ruby "test/pow_test.rb"
+end
+
+

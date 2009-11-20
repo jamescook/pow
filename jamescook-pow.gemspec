@@ -18,8 +18,10 @@ Gem::Specification.new do |s|
   s.files = [
     ".gitignore",
      "README",
+     "jamescook-pow.gemspec",
      "lib/pow.rb",
      "pow.rb",
+     "rakefile.rb",
      "test/pow_test.rb"
   ]
   s.homepage = %q{http://github.com/jamescook/pow}
