@@ -15,6 +15,10 @@ Examples:
   puts.red_   "Hello world in red, but with underscore"
   puts.rainbow "Hellow world, but more silly."
 
+  p.red "Hello world, but less typing .. also red."
+  p! "Hello world, in bold"
+  p! "Mix and match", :color => :purple, :background => :black
+
 
 TODO:
  - Figure out if you can bold a 'dark' color
