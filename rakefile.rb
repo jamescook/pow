@@ -3,9 +3,9 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gemspec|
     gemspec.name = "jamescook-pow"
-    gemspec.version = "0.1.1"
+    gemspec.version = "0.1.2"
     gemspec.summary = "puts with colors"
-    gemspec.description = "'puts' with shell colors."
+    gemspec.description = "Ruby 'puts' with shell colors."
     gemspec.email = "jamecook@gmail.com"
     gemspec.homepage = "http://github.com/jamescook/pow"
     gemspec.authors = ["James Cook"]
