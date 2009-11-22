@@ -54,6 +54,7 @@ module Pow
     attr_accessor :writer
     def initialize(*args)
       options = args[0].is_a?(Hash) ? args[0] : {:text => args[0].to_s}.merge(args[1] || {})
+      @@match_color = :red
       CODES.keys.each do |key|
         # Color
         self.class.send(:define_method, key.to_sym)       { |*args| Puts.new({:color => key.to_sym, :text => args[0], :misc => args[1]}).out! }
@@ -73,6 +74,14 @@ module Pow
       @writer = options[:writer] || STDOUT
       @formatted_text = format_string(options)
       out!(@formatted_text)
+    end
+
+    def self.match_color=(val)
+      @@match_color = val.to_sym
+    end
+   
+    def self.match_color
+      @@match_color
     end
    
     # Write the coloured text to IO
@@ -118,11 +127,21 @@ module Pow
       concealed      = options.fetch(:concealed){ false }
       strikethrough  = options.fetch(:strikethrough){ false }
       underscore     = options.fetch(:underscore){ false }
+      match          = options.fetch(:match){ false }
+
+      if options[:match_color]
+        Puts.match_color = options[:match_color]
+      end
 
       if text != ""
         result = [escape_sequence(color), text, escape_sequence(:reset), newline].join
       end
 
+      if match.is_a?(Regexp) || match.is_a?(String)
+        #negative = (color == Puts.match_color) ? true : false
+        result   = wrap_match(text, match, Puts.match_color, false)
+      end
+        
       if bold
         result.insert(0, escape_sequence(:bold))
       end
@@ -164,6 +183,10 @@ module Pow
       else
         return "\e[#{CODES[code]}m"
       end
+    end
+
+    def wrap_match(text, match, color, negative=false)
+      text.gsub(match, [escape_sequence(color), match, escape_sequence(:reset)].join('')) + "\n"
     end
   end
 end
