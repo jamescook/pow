@@ -53,7 +53,7 @@ module Pow
   class Puts  
     attr_accessor :writer
     def initialize(*args)
-      options = args[0].is_a?(String) ? {:text => args[0]}.merge(args[1] || {}) : (args[0] || {})
+      options = args[0].is_a?(Hash) ? args[0] : {:text => args[0].to_s}.merge(args[1] || {})
       CODES.keys.each do |key|
         # Color
         self.class.send(:define_method, key.to_sym)       { |*args| Puts.new({:color => key.to_sym, :text => args[0], :misc => args[1]}).out! }
