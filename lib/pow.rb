@@ -69,11 +69,19 @@ module Pow
         options[:negative]   ||= options[:misc][:negative]
         options[:underline]  ||= options[:misc][:underline]
         options[:background] ||= (options[:misc][:background] || options[:misc][:on])
+        options[:on]         ||= options[:background]
         options[:strikethrough]  ||= options[:misc][:strikethrough]
+        options[:match]       ||= options[:misc][:match]
+        options[:match_color] ||= options[:misc][:match_color]
       end
+      @@color = options[:color]  || :white
       @writer = options[:writer] || STDOUT
       @formatted_text = format_string(options)
       out!(@formatted_text)
+    end
+
+    def self.color
+      @@color
     end
 
     def self.match_color=(val)
@@ -123,7 +131,7 @@ module Pow
       negative       = options.fetch(:negative){ false }
       italic         = options.fetch(:italic){ false }
       underline      = options.fetch(:underline){ false }
-      background     = options.fetch(:background){ false }
+      background     = options.fetch(:background){ false } || options.fetch(:on){ false}
       concealed      = options.fetch(:concealed){ false }
       strikethrough  = options.fetch(:strikethrough){ false }
       underscore     = options.fetch(:underscore){ false }
@@ -137,11 +145,6 @@ module Pow
         result = [escape_sequence(color), text, escape_sequence(:reset), newline].join
       end
 
-      if match.is_a?(Regexp) || match.is_a?(String)
-        #negative = (color == Puts.match_color) ? true : false
-        result   = wrap_match(text, match, Puts.match_color, false)
-      end
-        
       if bold
         result.insert(0, escape_sequence(:bold))
       end
@@ -170,6 +173,10 @@ module Pow
         result.insert(0, escape_sequence(:underscore))
       end
 
+      if match.is_a?(Regexp) || match.is_a?(String)
+        result   = wrap_match(result, match, Puts.match_color, false)
+      end
+
       return result
     end
 
@@ -185,8 +192,9 @@ module Pow
       end
     end
 
-    def wrap_match(text, match, color, negative=false)
-      text.gsub(match, [escape_sequence(color), match, escape_sequence(:reset)].join('')) + "\n"
+    def wrap_match(text, match, match_color, negative=false)
+      #TODO use the negative sequence when the text color is the same as the match color.
+      text.gsub(match, [escape_sequence(match_color), match, escape_sequence(Puts.color)].join(''))
     end
   end
 end
