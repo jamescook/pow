@@ -5,9 +5,11 @@ module Pow
       @@defaults = {}
       base.send(:define_method, :puts){ |*args| Puts.new(*args) }
       base.send(:define_method, :puts!){ |*args| opts=(args.detect{|a| a.is_a?(Hash)} || {}).merge(:misc => {:bold => true}); args.reject!{|a| a.is_a?(Hash)}; args = [args.push(opts)].flatten; Puts.new(*args) } # Now that's just self-explanatory ..
+      base.send(:define_method, :puts_){ |*args| opts=(args.detect{|a| a.is_a?(Hash)} || {}).merge(:misc => {:underline => true}); args.reject!{|a| a.is_a?(Hash)}; args = [args.push(opts)].flatten; Puts.new(*args) } # Now that's just self-explanatory ..
 
       base.send(:alias_method, :p, :puts)
       base.send(:alias_method, :p!, :puts!)
+      base.send(:alias_method, :p_, :puts_)
     end
     def defaults
       @@defaults
