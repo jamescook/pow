@@ -99,7 +99,7 @@ module Pow
       end
 
       def match_color=(val)
-        @@match_color = val.to_sym
+        @@match_color = val
       end
      
       def match_color
@@ -149,10 +149,9 @@ module Pow
       strikethrough  = options.fetch(:strikethrough){ Pow.defaults[:strikethrough] }
       underscore     = options.fetch(:underscore){ Pow.defaults[:underscore] }
       match          = options.fetch(:match){ false }
+      match_color    = options.fetch(:match_color){ Pow.defaults[:match_color] || :red }
 
-      if options[:match_color]
-        Puts.match_color = options[:match_color]
-      end
+      Puts.match_color = (match_color == color) ? [:negative, match_color] : match_color
 
       if text != ""
         result = [escape_sequence(color), text, escape_sequence(:reset), newline].join
@@ -189,7 +188,7 @@ module Pow
       end
 
       if match.is_a?(Regexp) || match.is_a?(String)
-        result   = wrap_match(result, match, Puts.match_color, false)
+        result   = wrap_match(result, match, escape_sequence_of(Puts.match_color), false)
       end
 
       return result + escape_sequence(:clear)
@@ -205,6 +204,10 @@ module Pow
       else
         return "\e[#{CODES[code]}m"
       end
+    end
+
+    def escape_sequence_of(arr)
+      arr.is_a?(Array) ? arr.inject(""){|m, v| m+= escape_sequence(v)} : arr
     end
 
     def wrap_match(text, match, match_color, negative=false)

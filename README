@@ -15,6 +15,9 @@ Examples:
   puts.red_   "Hello world in red, but with underscore"
   puts.rainbow "Hello world, but more silly."
 
+  puts_       "Hello world, underscored."
+  puts!       "Hello world, bold."
+
   puts        "Hello world, and I can highlight matches.", :match => "can"
   puts        "Hello world, and I can highlight matches with a specific color.", :match => "can", :match_color => :purple
 
