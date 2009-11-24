@@ -15,10 +15,18 @@ class PowTest < Test::Unit::TestCase
     assert_equal "\e[37mTEST\e[0m\n", @writer.gets  # White text
   end
 
+  def test_puts_with_bold_default
+    Pow.defaults = {:bold => true}
+    @puts.new(:text => "TEST", :writer => @writer).out!
+    @writer.rewind
+    Pow.defaults = {:bold => false}
+    assert_equal "\e[1m\e[37mTEST\e[0m\n", @writer.gets
+  end
+
   def test_puts_with_non_string
     @puts.new(:text => 1, :writer => @writer).out!
     @writer.rewind
-    assert_equal "\e[37m1\e[0m\n", @writer.gets  # White text
+    assert_equal "\e[37m1\e[0m\n", @writer.gets 
   end
 
   def test_puts_with_match

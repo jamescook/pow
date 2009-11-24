@@ -1,12 +1,23 @@
 module Pow
   # Override puts on include to allow coloring (but also retain existing function)
-  def self.included(base)
-    base.send(:define_method, :puts){ |*args| Puts.new(*args) }
-    base.send(:define_method, :puts!){ |*args| opts=(args.detect{|a| a.is_a?(Hash)} || {}).merge(:misc => {:bold => true}); args.reject!{|a| a.is_a?(Hash)}; args = [args.push(opts)].flatten; Puts.new(*args) } # Now that's just self-explanatory ..
+  class << self
+    def included(base)
+      @@defaults = {}
+      base.send(:define_method, :puts){ |*args| Puts.new(*args) }
+      base.send(:define_method, :puts!){ |*args| opts=(args.detect{|a| a.is_a?(Hash)} || {}).merge(:misc => {:bold => true}); args.reject!{|a| a.is_a?(Hash)}; args = [args.push(opts)].flatten; Puts.new(*args) } # Now that's just self-explanatory ..
 
-    base.send(:alias_method, :p, :puts)
-    base.send(:alias_method, :p!, :puts!)
+      base.send(:alias_method, :p, :puts)
+      base.send(:alias_method, :p!, :puts!)
+    end
+    def defaults
+      @@defaults
+    end
+
+    def defaults=(val)
+      @@defaults.merge!(val)
+    end
   end
+
   CODES = {
           :clear           => 0,
           :reset           => 0, #clear
@@ -74,22 +85,24 @@ module Pow
         options[:match]       ||= options[:misc][:match]
         options[:match_color] ||= options[:misc][:match_color]
       end
-      @@color = options[:color]  || :white
-      @writer = options[:writer] || STDOUT
+      @@color    = options[:color]  || :white
+      @writer    = options[:writer] || STDOUT
       @formatted_text = format_string(options)
       out!(@formatted_text)
     end
 
-    def self.color
-      @@color
-    end
+    class << self
+      def color
+        @@color
+      end
 
-    def self.match_color=(val)
-      @@match_color = val.to_sym
-    end
-   
-    def self.match_color
-      @@match_color
+      def match_color=(val)
+        @@match_color = val.to_sym
+      end
+     
+      def match_color
+        @@match_color
+      end
     end
    
     # Write the coloured text to IO
@@ -110,9 +123,7 @@ module Pow
       out!(text.to_s.split("").inject(""){|m, word| m+= format_string(:text => word, :bold => true, :newline => "", :color => painbow_keys.sort_by{|k| rand}[0]) + " "  } + "\n")
     end
 
-    def inspect
-      nil
-    end
+    def inspect; ''; end
 
     protected
     def painbow_keys
@@ -127,14 +138,14 @@ module Pow
       newline        = options.fetch(:newline){ "\n" }
       color          = options.fetch(:color){ :white }
       text           = options.fetch(:text){ '' }
-      bold           = options.fetch(:bold){ false }
-      negative       = options.fetch(:negative){ false }
-      italic         = options.fetch(:italic){ false }
-      underline      = options.fetch(:underline){ false }
-      background     = options.fetch(:background){ false } || options.fetch(:on){ false}
+      bold           = options.fetch(:bold){ Pow.defaults[:bold] }
+      negative       = options.fetch(:negative){ Pow.defaults[:negative] }
+      italic         = options.fetch(:italic){ Pow.defaults[:italic] }
+      underline      = options.fetch(:underline){ Pow.defaults[:underline] }
+      background     = options.fetch(:background){ Pow.defaults[:background] } || options.fetch(:on){ Pow.defaults[:on]}
       concealed      = options.fetch(:concealed){ false }
-      strikethrough  = options.fetch(:strikethrough){ false }
-      underscore     = options.fetch(:underscore){ false }
+      strikethrough  = options.fetch(:strikethrough){ Pow.defaults[:strikethrough] }
+      underscore     = options.fetch(:underscore){ Pow.defaults[:underscore] }
       match          = options.fetch(:match){ false }
 
       if options[:match_color]
@@ -144,6 +155,8 @@ module Pow
       if text != ""
         result = [escape_sequence(color), text, escape_sequence(:reset), newline].join
       end
+
+      result ||= ""
 
       if bold
         result.insert(0, escape_sequence(:bold))
@@ -177,7 +190,7 @@ module Pow
         result   = wrap_match(result, match, Puts.match_color, false)
       end
 
-      return result
+      return result + escape_sequence(:clear)
     end
 
     def escape_sequence(code)
