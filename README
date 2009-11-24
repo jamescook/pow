@@ -23,6 +23,6 @@ Examples:
   p! "Mix and match", :color => :purple, :background => :black
 
 
-You can also set defaults and place in your ~/.irbrc
+You can also set defaults in your ~/.irbrc or wherever.
   require 'pow'
   Pow.defaults = {:bold => true}  # Now any puts will default to bold
