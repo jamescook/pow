@@ -31,6 +31,22 @@ You can set defaults in your ~/.irbrc or wherever.
   require 'pow'
   Pow.defaults = {:bold => true}  # Now any puts will default to bold
 
+
+Profiles:
+=======================================================
+
+Pow will try to load "~/.pow_defaults" into the Pow.defaults hash when loaded/required.
+You can create custom profiles with the Pow::Profile class.
+
+ -- IRB Example
+    > profile = Pow::Profile.new   # defaults to a file in $HOME
+    > profile.settings = {:bold => true, :color => :purple, :on => :black}
+    > profile.save
+    > Pow.load_profile             # No argument needed if using default settings file
+
+
+Misc:
+
 Pow can be enabled/disabled with Pow.enable or Pow.disable
 
 There's a script included that you can pipe text into and output customized text:

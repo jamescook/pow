@@ -8,7 +8,7 @@ module Pow
     attr_reader   :yaml
 
     def initialize(profile_path=:default)
-      @profile_path = (profile_path == :default) ? File.expand_path("~/pow_defaults") : profile_path
+      @profile_path = (profile_path == :default) ? File.expand_path("~/.pow_defaults") : profile_path
       @settings     = read rescue {}
       @name         = "Default"
     end
