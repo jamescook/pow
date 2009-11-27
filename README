@@ -25,11 +25,13 @@ Examples:
   p! "Hello world, in bold"
   p! "Mix and match", :color => :purple, :background => :black
 
+========================================================
 
-You can also set defaults in your ~/.irbrc or wherever.
+You can set defaults in your ~/.irbrc or wherever.
   require 'pow'
   Pow.defaults = {:bold => true}  # Now any puts will default to bold
 
+Pow can be enabled/disabled with Pow.enable or Pow.disable
 
 There's a script included that you can pipe text into and output customized text:
   cat README | ruby bin/ruby-pow --bold --background=purple

@@ -5,19 +5,22 @@
 
 Gem::Specification.new do |s|
   s.name = %q{jamescook-pow}
-  s.version = "0.1.4"
+  s.version = "0.1.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["James Cook"]
-  s.date = %q{2009-11-23}
+  s.date = %q{2009-11-26}
+  s.default_executable = %q{ruby-pow}
   s.description = %q{Ruby 'puts' with shell colors.}
   s.email = %q{jamecook@gmail.com}
+  s.executables = ["ruby-pow"]
   s.extra_rdoc_files = [
     "README"
   ]
   s.files = [
     ".gitignore",
      "README",
+     "bin/ruby-pow",
      "jamescook-pow.gemspec",
      "lib/pow.rb",
      "pow.rb",

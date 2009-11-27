@@ -7,6 +7,27 @@ class PowTest < Test::Unit::TestCase
   def setup
     @puts = Pow::Puts
     @writer = StringIO.new
+    Pow.enable
+  end
+
+  def test_pow_enable
+    Pow.disable
+    Pow.enable
+    assert_equal false, Pow.enabled?
+  end
+
+  def test_pow_enable
+    Pow.enable
+    Pow.disable
+    Pow.enable
+    assert_equal true, Pow.enabled?
+  end
+
+  def test_puts_strips_formatting_when_pow_disabled
+    Pow.disable
+    @puts.new(:text => "TEST", :bold => true, :writer => @writer).out!
+    @writer.rewind
+    assert_equal "TEST\n", @writer.gets
   end
 
   def test_puts
