@@ -1,0 +1,38 @@
+#! /usr/bin/ruby
+require 'rubygems'
+require 'pow'
+require 'optparse'
+include Pow
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: TODO.." 
+
+  opts.on("-m MATCH", "--match MATCH", "Match keyword") do |v|
+    options[:match] = v
+  end
+
+  opts.on("--match-color COLOR", "Match color") do |v|
+    options[:match_color] = v.to_sym
+  end
+
+  opts.on("--bold", "Bold") do |v|
+    options[:bold] = true
+  end
+
+  opts.on("-c COLOR", "--color COLOR", "Text color") do |v|
+    options[:color] = v.downcase.to_sym
+  end
+
+  opts.on("-b BACKGROUND", "--background BACKGROUND", "Background color") do |v|
+    options[:background] = v.downcase.to_sym
+  end
+end.parse!
+
+Pow.defaults = options
+
+if $0 == __FILE__
+  STDIN.read.split("\n").each do |line|
+    puts line, Pow.defaults  # FIXME: Why aren't defaults working implicitly..
+  end
+end

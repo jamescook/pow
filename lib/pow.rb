@@ -11,6 +11,7 @@ module Pow
       base.send(:alias_method, :p!, :puts!)
       base.send(:alias_method, :p_, :puts_)
     end
+
     def defaults
       @@defaults
     end
@@ -66,7 +67,7 @@ module Pow
   class Puts  
     attr_accessor :writer
     def initialize(*args)
-      options = args[0].is_a?(Hash) ? args[0] : {:text => args[0].to_s}.merge(args[1] || {})
+      options = args[0].is_a?(Hash) ? args[0] : {:text => args[0].to_s}.merge(args[1] || {}) rescue {:text => args[0]}
       @@match_color = :red
       CODES.keys.each do |key|
         # Color
@@ -125,7 +126,9 @@ module Pow
       out!(text.to_s.split("").inject(""){|m, word| m+= format_string(:text => word, :bold => true, :newline => "", :color => painbow_keys.sort_by{|k| rand}[0]) + " "  } + "\n")
     end
 
-    def inspect; ''; end
+    def inspect
+      @formatted_text.inspect
+    end
 
     protected
     def painbow_keys
@@ -218,3 +221,8 @@ module Pow
 end
 
 include Pow
+
+if $0 == __FILE__
+  puts STDIN.gets
+end
+
