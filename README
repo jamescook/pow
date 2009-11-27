@@ -29,3 +29,7 @@ Examples:
 You can also set defaults in your ~/.irbrc or wherever.
   require 'pow'
   Pow.defaults = {:bold => true}  # Now any puts will default to bold
+
+
+There's a script included that you can pipe text into and output customized text:
+  cat README | ruby bin/ruby-pow --bold --background=purple
