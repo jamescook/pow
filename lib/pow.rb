@@ -4,6 +4,7 @@ module Pow
     def included(base)
       @@defaults = {}
       @@enabled  = true
+      @@profile  = nil
       base.send(:define_method, :puts){ |*args| Puts.new(*args) }
       base.send(:define_method, :puts!){ |*args| opts=(args.detect{|a| a.is_a?(Hash)} || {}).merge(:misc => {:bold => true}); args.reject!{|a| a.is_a?(Hash)}; args = [args.push(opts)].flatten; Puts.new(*args) } # Now that's just self-explanatory ..
       base.send(:define_method, :puts_){ |*args| opts=(args.detect{|a| a.is_a?(Hash)} || {}).merge(:misc => {:underline => true}); args.reject!{|a| a.is_a?(Hash)}; args = [args.push(opts)].flatten; Puts.new(*args) } # Now that's just self-explanatory ..
@@ -35,6 +36,15 @@ module Pow
 
     def defaults=(val)
       @@defaults.merge!(val)
+    end
+
+    def profile
+      @@profile
+    end
+
+    def load_profile( profile_path=:default )
+      @@profile    = Pow::Profile.new( profile_path )
+      Pow.defaults = @@profile.read[:settings]
     end
   end
 
@@ -158,7 +168,7 @@ module Pow
 
     def format_string(options={})
       newline        = options.fetch(:newline){ "\n" }
-      color          = options.fetch(:color){ :white }
+      color          = options.fetch(:color){ Pow.defaults[:color] || :white }
       text           = options.fetch(:text){ '' }
       bold           = options.fetch(:bold){ Pow.defaults[:bold] }
       negative       = options.fetch(:negative){ Pow.defaults[:negative] }

@@ -18,7 +18,9 @@ task :default => [:test]
 
 desc "Run tests"
 task :test do |t|
-  ruby "test/pow_test.rb"
+  Dir[ File.join(File.dirname(File.expand_path(__FILE__)), "test", "**") ].each do |test_file|
+    ruby test_file
+  end
 end
 
 
