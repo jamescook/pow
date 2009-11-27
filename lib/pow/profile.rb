@@ -9,13 +9,14 @@ module Pow
 
     def initialize(profile_path=:default)
       @profile_path = (profile_path == :default) ? File.expand_path("~/.pow_defaults") : profile_path
-      @settings     = read rescue {}
+      @settings     = read if File.exists?(@profile_path)
       @name         = "Default"
     end
 
     def write
       FileUtils.mkdir_p( File.dirname(profile_path) )
       File.open( profile_path, 'wb'){|f| YAML.dump( settings, f ) }
+      read
     end
     alias_method :save, :write
 

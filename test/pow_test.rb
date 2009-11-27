@@ -8,6 +8,7 @@ class PowTest < Test::Unit::TestCase
     @puts = Pow::Puts
     @writer = StringIO.new
     Pow.enable
+    Pow.unload_profile  # Prevents users profile from messing up test output
   end
 
   def test_pow_enable

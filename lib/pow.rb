@@ -36,7 +36,7 @@ module Pow
     end
 
     def defaults=(val)
-      @@defaults.merge!(val)
+      @@defaults = val || {}
     end
 
     def profile
@@ -46,6 +46,10 @@ module Pow
     def load_profile( profile_path=:default )
       @@profile    = Pow::Profile.new( profile_path )
       Pow.defaults = @@profile.read[:settings] rescue {}
+    end
+
+    def unload_profile
+      Pow.defaults = {}
     end
   end
 

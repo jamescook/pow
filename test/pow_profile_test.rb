@@ -8,7 +8,7 @@ class PowProfileTest < Test::Unit::TestCase
     @puts = Pow::Puts
     @writer = StringIO.new
     @temp_defaults_path = File.join(File.dirname(__FILE__), 'DEFAULTS')
-    @settings = {:bold => true, :color => :purple}
+    @settings = {:bold => false, :color => :purple}
     Pow.enable
   end
 
@@ -25,9 +25,9 @@ class PowProfileTest < Test::Unit::TestCase
 
   def test_pow_loads_profile
     profile = Pow::Profile.new( @temp_defaults_path )
-    profile.settings = @settings
+    profile.settings = {:color => :red, :bold => false}
     profile.save
     Pow.load_profile( @temp_defaults_path )
-    assert_equal @settings, Pow.defaults
+    assert_equal profile.settings[:settings], Pow.defaults
   end
 end
