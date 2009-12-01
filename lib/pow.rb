@@ -1,3 +1,5 @@
+require File.join( File.dirname(__FILE__), "pow", "profile.rb")
+
 module Pow
   # Override puts on include to allow coloring (but also retain existing function)
   class << self
@@ -51,6 +53,8 @@ module Pow
     def unload_profile
       Pow.defaults = {}
     end
+    alias_method :reset_defaults, :unload_profile
+
   end
 
   CODES = {
