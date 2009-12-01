@@ -102,6 +102,7 @@ module Pow
 
   class Puts  
     attr_accessor :writer
+    attr_reader   :formatted_text
     def initialize(*args)
       options = args[0].is_a?(Hash) ? args[0] : {:text => args[0].to_s}.merge(args[1] || {}) rescue {:text => args[0]}
       @@match_color = :red
@@ -153,17 +154,21 @@ module Pow
 
     def rainbow(*args)
       text = args[0]
-      out!(text.to_s.split("").inject(""){|m, word| m+= format_string(:text => word, :bold => true, :newline => "", :color => rainbow_keys.sort_by{|k| rand}[0]) + " "  } + "\n")
+      result = (text.to_s.split("").inject(""){|m, word| m+= format_string(:text => word, :bold => true, :newline => "", :color => rainbow_keys.sort_by{|k| rand}[0]) + " "  } + "\n")
+      out!(result)
+      return result
     end
 
     # Feel the painbow
     def painbow(*args)
       text = args[0]
-      out!(text.to_s.split("").inject(""){|m, word| m+= format_string(:text => word, :bold => true, :newline => "", :color => painbow_keys.sort_by{|k| rand}[0]) + " "  } + "\n")
+      result = (text.to_s.split("").inject(""){|m, word| m+= format_string(:text => word, :bold => true, :newline => "", :color => painbow_keys.sort_by{|k| rand}[0]) + " "  } + "\n")
+      out!(result)
+      return result
     end
 
     def inspect
-      @formatted_text.inspect
+      @formatted_text
     end
 
     protected

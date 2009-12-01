@@ -30,4 +30,12 @@ class PowProfileTest < Test::Unit::TestCase
     Pow.load_profile( @temp_defaults_path )
     assert_equal profile.settings[:settings], Pow.defaults
   end
+  
+  def test_pow_inspect
+    assert_equal "<Pow::Profile 'Default'>", Pow.profile.inspect
+  end
+
+  def test_pow_preview
+    assert_equal "\e[31mHello world!\e[0m\n\e[0m", Pow.profile.preview # Basic .. white
+  end
 end

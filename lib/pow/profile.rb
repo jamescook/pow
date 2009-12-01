@@ -33,8 +33,11 @@ module Pow
     end
 
     def preview
-      opts = {:text => "Hello world!"}.merge( settings )
-      Puts.new( opts ).out!
+      opts = {:text => "Hello world!", :writer => StringIO.new}.merge( settings )
+      preview = Pow::Puts.new( opts )
+      preview.out!
+
+      return preview.formatted_text
     end
   end
 end
